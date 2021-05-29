@@ -1,15 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import './Login.css';
-import { firebaseConfigFrameWork, handleFbSignIn, handleGoogleSignIn, handleLogIn, handleSignUp } from './LoginManager';
 import { userContext } from '../../App';
 import { useHistory, useLocation } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const Login = () => {
-    // access firebase config
-    firebaseConfigFrameWork();
     const [newUser, setNewUser] = useState(false);
     const [spinner, setSpinner] = useState(false);
     const [loggedInUser, setLoggedInUser] = useContext(userContext);
@@ -29,89 +24,49 @@ const Login = () => {
     const location = useLocation();
     const { from } = location.state || { from: { pathname: "/" } };
 
-    // For using sign in with google
-    const googleSignIn = () => {
-        handleGoogleSignIn()
-            .then(res => {
-                if (res.email) {
-                    handleLogInUser(res, true);
-                }
-                else {
-                    const errorData = {
-                        error: res
-                    }
-                    setLoggedInUser(errorData);
-                }
-            })
-    }
-
-    // For using sign in with facebook
-    const fbSignIn = () => {
-        handleFbSignIn()
-            .then(res => {
-                if (res.email) {
-                    handleLogInUser(res, true);
-                }
-                else {
-                    const errorData = {
-                        error: res
-                    }
-                    setLoggedInUser(errorData);
-                }
-            })
-    }
-
     // For using login and signup
     const handleSubmit = (event) => {
+        setSpinner(true);
         if (!newUser && user.email && user.password) {
-            setSpinner(true);
-
-            handleLogIn(user.email, user.password)
-                .then(res => {
-                    if (res.email) {
-                        handleLogInUser(res, true);
-                    }
-                    else {
-                        const errorData = {
-                            error: res
-                        }
-                        setLoggedInUser(errorData);
-                        setSpinner(false);
-                    }
-                })
+            const userData = {
+                email: user.email,
+                password: user.password
+            }
+            
+            fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
         }
         if (newUser && user.email && user.password && user.confirmPassword) {
-            setSpinner(true);
-
             if (user.password.length === user.confirmPassword.length) {
-                handleSignUp(user.name, user.email, user.confirmPassword)
-                    .then(res => {
-                        if (res.email) {
-                            handleLogInUser(res, false);
-                            const userDetail = { ...user };
-                            userDetail.error = "";
-                            setUser(userDetail);
-                            setSpinner(false);
-                        }
-                        else {
-                            const errorData = {
-                                error: res
-                            }
-                            setLoggedInUser(errorData);
-                            const userDetail = { ...user };
-                            userDetail.error = "";
-                            setUser(userDetail);
-                            setSpinner(false);
-                        }
-                    })
+                const userData = {
+                    email: user.email,
+                    name: user.name,
+                    password: user.password
+                }
+                const userDetail = { ...user };
+                userDetail.error = '';
+                setUser(userDetail);
+
+                fetch('http://localhost:5000/addUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json'},
+                    body: JSON.stringify(userData)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
             }
             else {
                 const userDetail = { ...user };
                 userDetail.error = "Confirm password do not match";
                 setUser(userDetail);
-                setSpinner(false);
             }
         }
+        setSpinner(false);
         event.preventDefault();
     }
 
@@ -136,20 +91,6 @@ const Login = () => {
             newUser[event.target.name + "Valid"] = false;
             setUser(newUser);
         }
-    }
-
-    // For using to reduce repetition code
-    const handleLogInUser = (res, isReplace) => {
-        const newUser = {
-            isSignIn: true,
-            email: res.email,
-            name: res.displayName,
-            error: '',
-            photo: res.photoURL,
-            success: true
-        }
-        setLoggedInUser(newUser);
-        isReplace && history.replace(from);
     }
 
     // Conditionally showing log in and create new account button
@@ -179,7 +120,7 @@ const Login = () => {
                             <h6 className="error-message">{loggedInUser.error}</h6>
                         }
                         {
-                            newUser && 
+                            newUser &&
                             loggedInUser.email &&
                             <h6 style={{ color: 'green', textAlign: 'center', marginTop: '10px' }}>Sign up successful</h6>
                         }
@@ -226,16 +167,6 @@ const Login = () => {
                                     </span>
                             }
                         </h6>
-                    </div>
-
-                    <hr />
-                    <h5 className="text-center">Or</h5>
-                    <hr />
-
-                    <div className="text-center social-btn">
-                        <button onClick={googleSignIn}><FontAwesomeIcon icon={faGoogle} size="lg" /> Continue With Google</button>
-                        <br />
-                        <button onClick={fbSignIn}><FontAwesomeIcon icon={faFacebook} size="lg" /> Continue With Facebook</button>
                     </div>
 
                 </Col>
