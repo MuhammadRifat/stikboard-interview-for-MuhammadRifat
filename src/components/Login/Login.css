@@ -37,6 +37,6 @@
 }
 .error-message{ 
     color: red;
-    textAlign: center;
-    marginTop: 10px;
+    text-align: center;
+    margin-top: 10px;
 }
