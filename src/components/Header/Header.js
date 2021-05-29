@@ -10,7 +10,13 @@ const Header = () => {
             <Image className="w-50" src={logo} alt="" />
             {
                 loggedInUser.email &&
-                    <button className="bg-light" style={{ border: 'none', borderRadius: '5px', marginLeft: '20px' }}>Log out</button>
+                <button
+                    onClick={() => setLoggedInUser({})}
+                    className="bg-light"
+                    style={{ border: 'none', borderRadius: '5px', marginLeft: '20px' }}
+                >
+                    Log out
+                </button>
             }
         </Container>
     );

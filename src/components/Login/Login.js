@@ -27,20 +27,30 @@ const Login = () => {
     // For using login and signup
     const handleSubmit = (event) => {
         setSpinner(true);
+
         if (!newUser && user.email && user.password) {
             const userData = {
                 email: user.email,
                 password: user.password
             }
-            
+
             fetch('http://localhost:5000/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
             })
-            .then(res => res.json())
-            .then(data => console.log(data))
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        setLoggedInUser(data);
+                        history.replace(from);
+                    } else {
+                        setLoggedInUser({ error: 'Email or Password is incorrect' });
+                    }
+                    setSpinner(false);
+                })
         }
+
         if (newUser && user.email && user.password && user.confirmPassword) {
             if (user.password.length === user.confirmPassword.length) {
                 const userData = {
@@ -52,21 +62,29 @@ const Login = () => {
                 userDetail.error = '';
                 setUser(userDetail);
 
-                fetch('http://localhost:5000/addUser', {
+                fetch('http://localhost:5000/signup', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData)
                 })
-                .then(res => res.json())
-                .then(data => console.log(data))
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data) {
+                            setLoggedInUser({ error: 'Email already exists' });
+                        }
+                        else {
+                            setLoggedInUser({isSuccess: true});
+                        }
+                        setSpinner(false);
+                    })
             }
             else {
                 const userDetail = { ...user };
                 userDetail.error = "Confirm password do not match";
                 setUser(userDetail);
+                setSpinner(false);
             }
         }
-        setSpinner(false);
         event.preventDefault();
     }
 
@@ -121,7 +139,7 @@ const Login = () => {
                         }
                         {
                             newUser &&
-                            loggedInUser.email &&
+                            loggedInUser.isSuccess &&
                             <h6 style={{ color: 'green', textAlign: 'center', marginTop: '10px' }}>Sign up successful</h6>
                         }
 

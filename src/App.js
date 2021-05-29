@@ -22,9 +22,9 @@ function App() {
           <Route path="/login">
             <Login></Login>
           </Route>
-          <Route exact path="/">
+          <PrivateRoute exact path="/">
             <Dashboard></Dashboard>
-          </Route>
+          </PrivateRoute>
           <Route path="*">
             <NotFound></NotFound>
           </Route>

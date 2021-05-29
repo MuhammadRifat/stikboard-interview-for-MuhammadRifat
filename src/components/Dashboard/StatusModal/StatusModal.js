@@ -6,9 +6,11 @@ import { faYoutube, faWikipediaW } from '@fortawesome/free-brands-svg-icons'
 const StatusModal = (props) => {
     const { details, links, mission_name, rocket, launch_success, upcoming, flight_number, launch_date_utc } = props?.modalLaunchData;
 
+    // set status
     let launchStatus = launch_success ? 'Success' : upcoming ? 'Upcoming' : 'Failed';
     let bColor = '';
 
+    // conditionally change status color
     if (launchStatus === 'Success') {
         bColor = 'rgb(144, 255, 144)';
     }
