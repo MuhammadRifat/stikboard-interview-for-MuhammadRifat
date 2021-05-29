@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
 
-const userContext = createContext();
+export const userContext = createContext();
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});

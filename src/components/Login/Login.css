@@ -1,0 +1,42 @@
+.login-form input{
+    width: 100%;
+    margin-top: 13px;
+    padding: 5px;
+    font-size: 17px;
+    border: none;
+    border-bottom: 2px solid gray;
+}
+#submit-btn{
+    background-color: green;
+    border: 3px solid green;
+    border-radius: 4px;
+    color: white;
+}
+.social-btn button{
+    padding: 5px;
+    width: 60%;
+    margin-top: 10px;
+    background-color: white;
+    border: 1px solid rgb(141, 133, 133);
+    border-radius: 10px;
+    font-size: 18px;
+}
+.social-btn button:hover{
+    color: blue;
+    background-color: lightgray;
+    font-size: 18px;
+}
+.create-btn{
+    border: none;
+    background-color: white;
+    color: blue;
+    font-weight: bold;
+}
+.create-btn:hover{
+    text-decoration: underline;
+}
+.error-message{ 
+    color: red;
+    textAlign: center;
+    marginTop: 10px;
+}
