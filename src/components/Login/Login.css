@@ -7,8 +7,8 @@
     border-bottom: 2px solid gray;
 }
 #submit-btn{
-    background-color: green;
-    border: 3px solid green;
+    background-color: rgb(22, 48, 119);
+    border: 3px solid rgb(22, 48, 119);
     border-radius: 4px;
     color: white;
 }
