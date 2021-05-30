@@ -34,7 +34,7 @@ const Login = () => {
                 password: user.password
             }
 
-            fetch('http://localhost:5000/login', {
+            fetch('https://desolate-river-99000.herokuapp.com/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
@@ -62,7 +62,7 @@ const Login = () => {
                 userDetail.error = '';
                 setUser(userDetail);
 
-                fetch('http://localhost:5000/signup', {
+                fetch('https://desolate-river-99000.herokuapp.com/signup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData)
