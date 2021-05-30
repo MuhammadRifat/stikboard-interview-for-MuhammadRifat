@@ -52,7 +52,7 @@ const Login = () => {
         }
 
         if (newUser && user.email && user.password && user.confirmPassword) {
-            if (user.password.length === user.confirmPassword.length) {
+            if (user.password === user.confirmPassword) {
                 const userData = {
                     email: user.email,
                     name: user.name,
